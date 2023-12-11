@@ -116,7 +116,7 @@
       "name": "Anjali",
       "image": "/assets/chihuahua.avif",
       "description": "Bicycle canst nor henry RAM",
-      "isFavorite": false,
+      "isFavorite": true,
       "id": 16
     },
     {
@@ -130,14 +130,14 @@
       "name": "Sandra",
       "image": "/assets/boxer.png",
       "description": "Lamborghini deposit disintermediate turquoise Martin",
-      "isFavorite": false,
+      "isFavorite": true,
       "id": 18
     },
     {
       "name": "Yvette",
       "image": "/assets/boxer.png",
       "description": "distributed Sleek nest exploit Surinam compressing straight",
-      "isFavorite": true,
+      "isFavorite": false,
       "id": 19
     },
     {

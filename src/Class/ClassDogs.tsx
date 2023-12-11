@@ -1,92 +1,53 @@
 import { DogCard } from "../Shared/DogCard";
 import { Component } from "react";
-import { dogPictures } from "../dog-pictures";
+import { Dog } from "../types";
+import { Requests } from "../api";
 
-// Right now these dogs are constant, but in reality we should be getting these from our server
-export class ClassDogs extends Component {
+type ClassDogProps = {
+  dogs: Dog[];
+  refetchDogData: () => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+};
+
+export class ClassDogs extends Component<ClassDogProps> {
+  deleteDog = (dog: Dog) => {
+    this.props.setIsLoading(true);
+    return Requests.deleteDog(dog)
+      .then(this.props.refetchDogData)
+      .finally(() => this.props.setIsLoading(false));
+  };
+
+  updateDog = (dog: Dog, isFavorite: boolean) => {
+    this.props.setIsLoading(true);
+    return Requests.updateDog(dog, isFavorite)
+      .then(this.props.refetchDogData)
+      .finally(() => this.props.setIsLoading(false));
+  };
+
   render() {
+    const { dogs, isLoading } = this.props;
+
     return (
       <>
-        <DogCard
-          dog={{
-            id: 1,
-            image: dogPictures.BlueHeeler,
-            description: "Example Description",
-            isFavorite: false,
-            name: "Cute Blue Heeler",
-          }}
-          key={1}
-          onTrashIconClick={() => {
-            alert("clicked trash");
-          }}
-          onHeartClick={() => {
-            alert("clicked heart");
-          }}
-          onEmptyHeartClick={() => {
-            alert("clicked empty heart");
-          }}
-          isLoading={false}
-        />
-        <DogCard
-          dog={{
-            id: 2,
-            image: dogPictures.Boxer,
-            description: "Example Description",
-            isFavorite: false,
-            name: "Cute Boxer",
-          }}
-          key={2}
-          onTrashIconClick={() => {
-            alert("clicked trash");
-          }}
-          onHeartClick={() => {
-            alert("clicked heart");
-          }}
-          onEmptyHeartClick={() => {
-            alert("clicked empty heart");
-          }}
-          isLoading={false}
-        />
-        <DogCard
-          dog={{
-            id: 3,
-            image: dogPictures.Chihuahua,
-            description: "Example Description",
-            isFavorite: false,
-            name: "Cute Chihuahua",
-          }}
-          key={3}
-          onTrashIconClick={() => {
-            alert("clicked trash");
-          }}
-          onHeartClick={() => {
-            alert("clicked heart");
-          }}
-          onEmptyHeartClick={() => {
-            alert("clicked empty heart");
-          }}
-          isLoading={false}
-        />
-        <DogCard
-          dog={{
-            id: 4,
-            image: dogPictures.Corgi,
-            description: "Example Description",
-            isFavorite: false,
-            name: "Cute Corgi",
-          }}
-          key={4}
-          onTrashIconClick={() => {
-            alert("clicked trash");
-          }}
-          onHeartClick={() => {
-            alert("clicked heart");
-          }}
-          onEmptyHeartClick={() => {
-            alert("clicked empty heart");
-          }}
-          isLoading={false}
-        />
+        {dogs.map((dog) => {
+          return (
+            <DogCard
+              dog={dog}
+              key={dog.id}
+              onTrashIconClick={() => {
+                this.deleteDog(dog);
+              }}
+              onHeartClick={() => {
+                this.updateDog(dog, false);
+              }}
+              onEmptyHeartClick={() => {
+                this.updateDog(dog, true);
+              }}
+              isLoading={isLoading}
+            />
+          );
+        })}
       </>
     );
   }

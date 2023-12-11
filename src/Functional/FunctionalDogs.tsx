@@ -1,13 +1,32 @@
 import { DogCard } from "../Shared/DogCard";
-import { dogPictures } from "../dog-pictures";
 import { Dog } from "../types";
-import { useEffect, useState } from "react";
+import { Requests } from "../api";
 
-// Right now these dogs are constant, but in reality we should be getting these from our server
-export const FunctionalDogs = ({ dogs }: { dogs: Dog[] }) => {
+export const FunctionalDogs = ({
+  dogs,
+  refetchDogData,
+  isLoading,
+  setIsLoading,
+}: {
+  dogs: Dog[];
+  refetchDogData: () => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+}) => {
+  const deleteDog = (dog: Dog) => {
+    setIsLoading(true);
+    return Requests.deleteDog(dog)
+      .then(refetchDogData)
+      .finally(() => setIsLoading(false));
+  };
+  const updateDog = (dog: Dog, isFavorite: boolean) => {
+    setIsLoading(true);
+    return Requests.updateDog(dog, isFavorite)
+      .then(refetchDogData)
+      .finally(() => setIsLoading(false));
+  };
+
   return (
-    //  the "<> </>"" are called react fragments, it's like adding all the html inside
-    // without adding an actual html element
     <>
       {dogs.map((dog) => {
         return (
@@ -15,15 +34,15 @@ export const FunctionalDogs = ({ dogs }: { dogs: Dog[] }) => {
             dog={dog}
             key={dog.id}
             onTrashIconClick={() => {
-              alert("clicked trash");
+              deleteDog(dog);
             }}
             onHeartClick={() => {
-              alert("clicked heart");
+              updateDog(dog, false);
             }}
             onEmptyHeartClick={() => {
-              alert("clicked empty heart");
+              updateDog(dog, true);
             }}
-            isLoading={false}
+            isLoading={isLoading}
           />
         );
       })}

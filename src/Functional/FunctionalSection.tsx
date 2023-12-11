@@ -4,23 +4,36 @@ import { FunctionalContentLayout } from "./FunctionalContentLayout";
 import { FunctionalDogs } from "./FunctionalDogs";
 import { FunctionalCreateDogForm } from "./FunctionalCreateDogForm";
 import { useState, useEffect } from "react";
-import { Dog } from "../types";
-
-type SelectorToggle = [boolean, boolean, boolean];
-const getAllDogs = () =>
-  fetch("http://localhost:3000/dogs").then((response) => response.json());
+import { Dog, SelectorToggle } from "../types";
+import { Requests } from "../api";
+import toast from "react-hot-toast";
 
 export const FunctionalSection = () => {
+  const [allDogs, setAllDogs] = useState<Dog[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSelectorActive, setIsSelectorActive] = useState<SelectorToggle>([
     false,
     false,
     false,
   ]);
 
-  const [allDogs, setAllDogs] = useState<Dog[]>([]);
+  const refetchDogData = () => {
+    return Requests.getAllDogs().then(setAllDogs);
+  };
+
   useEffect(() => {
-    getAllDogs().then(setAllDogs);
+    refetchDogData();
   }, []);
+
+  const postDog = (dog: Omit<Dog, "id">) => {
+    setIsLoading(true);
+    Requests.postDog(dog)
+      .then(refetchDogData)
+      .then(() => {
+        toast.success(`Created ${dog.name}`);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const toggleActiveClassName = (index: number) =>
     isSelectorActive[index] ? "active" : "";
@@ -33,9 +46,9 @@ export const FunctionalSection = () => {
     setIsSelectorActive(newState);
   };
 
-  const shouldShowForm = isSelectorActive[2];
   const shouldShowFavoriteDogs = isSelectorActive[0];
   const shouldShowUnfavoritedDogs = isSelectorActive[1];
+  const shouldShowForm = isSelectorActive[2];
 
   const favoritedDogs = allDogs.filter(
     (dog) => dog.isFavorite === true
@@ -69,7 +82,7 @@ export const FunctionalSection = () => {
             className={`selector ${toggleActiveClassName(0)}`}
             onClick={() => setActiveSelector(0)}
           >
-            favorited ( 12 )
+            favorited ( {favoritedDogs.length} )
           </div>
 
           {/* This should display the unfavorited count */}
@@ -77,7 +90,7 @@ export const FunctionalSection = () => {
             className={`selector ${toggleActiveClassName(1)}`}
             onClick={() => setActiveSelector(1)}
           >
-            unfavorited ( 25 )
+            unfavorited ( {unfavoritedDogs.length} )
           </div>
           <div
             className={`selector ${toggleActiveClassName(2)}`}
@@ -87,12 +100,16 @@ export const FunctionalSection = () => {
           </div>
         </div>
       </div>
-
       <FunctionalContentLayout>
         {shouldShowForm ? (
-          <FunctionalCreateDogForm />
+          <FunctionalCreateDogForm postDog={postDog} isLoading={isLoading} />
         ) : (
-          <FunctionalDogs dogs={dogArray} />
+          <FunctionalDogs
+            dogs={dogArray}
+            refetchDogData={refetchDogData}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
         )}
       </FunctionalContentLayout>
     </section>

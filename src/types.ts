@@ -5,3 +5,5 @@ export type Dog = {
   isFavorite: boolean;
   id: number;
 }
+
+export type SelectorToggle = [boolean, boolean, boolean];
