@@ -15,14 +15,12 @@ export const Requests = {
       headers: { "Content-Type": "application/json" },
     }).then((response) => response.json());
   },
-
   // should delete a dog from the database
   deleteDog: (dog: Dog) => {
     return fetch(`${baseUrl}/dogs/${dog.id}`, {
       method: "DELETE",
     }).then((response) => response.json());
   },
-
   updateDog: (dog: Dog, isFavorite: boolean): Promise<Dog> => {
     return fetch(`${baseUrl}/dogs/${dog.id}`, {
       body: JSON.stringify({ isFavorite: isFavorite }),
@@ -32,7 +30,6 @@ export const Requests = {
       },
     }).then((response) => response.json());
   },
-
   // Just a dummy function for use in the playground
   dummyFunction: () => {
     console.log("dummy stuff");

@@ -1,4 +1,3 @@
-// you can use this type for react children if you so choose
 import { Link } from "react-router-dom";
 import { FunctionalContentLayout } from "./FunctionalContentLayout";
 import { FunctionalDogs } from "./FunctionalDogs";
@@ -66,7 +65,6 @@ export const FunctionalSection = () => {
       return allDogs;
     }
   };
-
   const dogArray = determineDogArray();
 
   return (
@@ -77,15 +75,12 @@ export const FunctionalSection = () => {
           Change to Class
         </Link>
         <div className="selectors">
-          {/* This should display the favorited count */}
           <div
             className={`selector ${toggleActiveClassName(0)}`}
             onClick={() => setActiveSelector(0)}
           >
             favorited ( {favoritedDogs.length} )
           </div>
-
-          {/* This should display the unfavorited count */}
           <div
             className={`selector ${toggleActiveClassName(1)}`}
             onClick={() => setActiveSelector(1)}

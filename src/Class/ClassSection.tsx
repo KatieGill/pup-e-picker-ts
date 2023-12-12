@@ -1,4 +1,3 @@
-// you can use `ReactNode` to add a type to the children prop
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import { Dog, SelectorToggle } from "../types";
@@ -80,7 +79,6 @@ export class ClassSection extends Component<
         return allDogs;
       }
     };
-
     const dogArray = determineDogArray();
 
     return (
@@ -93,7 +91,6 @@ export class ClassSection extends Component<
           </Link>
 
           <div className="selectors">
-            {/* This should display the favorited count */}
             <div
               className={`selector ${this.toggleActiveClassName(0)}`}
               onClick={() => {
@@ -102,8 +99,6 @@ export class ClassSection extends Component<
             >
               favorited ( {favoritedDogs.length} )
             </div>
-
-            {/* This should display the unfavorited count */}
             <div
               className={`selector ${this.toggleActiveClassName(1)}`}
               onClick={() => {

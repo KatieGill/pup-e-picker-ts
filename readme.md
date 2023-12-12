@@ -80,8 +80,8 @@ Note: It's not a perfect mapping to what you're going to build, below highlights
 
 - [x] place `FunctionalDogs` inside of the `.content-container` div of the `FunctionalSection` component **using React Children**
 - [x] place `FunctionalCreateDogForm` inside of the `.content-container` div of the `FunctionalSection` component **using React Children**
-- [ ] place `ClassDogs` inside of the `.content-container` div of the `ClassSection` component **using React Children**
-- [ ] place `ClassCreateDogForm` inside of the `.content-container` div of the `ClassSection` component **using React Children**
+- [x] place `ClassDogs` inside of the `.content-container` div of the `ClassSection` component **using React Children**
+- [x] place `ClassCreateDogForm` inside of the `.content-container` div of the `ClassSection` component **using React Children**
 
 ## Navigation
 
@@ -126,7 +126,7 @@ You should use conditional rendering to show different components inside of the 
 ## Organizing your fetch calls
 
 - [x] You should have a file called `api.ts` with a request object that contains all of your fetching functions
-- [ ] These can and should be shared to both your class components and your functional components as needed
+- [x] These can and should be shared to both your class components and your functional components as needed
 - [x] `getAllDogs` should return a promise that resolves to an array of all the dogs in the database
 - [x] `postDog` should take in a partial dog object, and return a promise that resolves to the dog object that was created
   - Note: Don't provide an id with the body of your request, the server will create an id for you
@@ -161,5 +161,5 @@ If the data is still loading then...
 - [x] If you navigate to the `all` tab, you should see the new dog in the list of dogs
 - [x] If you navigate to the `favorited` tab, you should NOT see the new dog in the list of dogs
 - [x] If you navigate to the `unfavorited` tab, you should see the new dog in the list of dogs
-- [ ] After the submission the form should be cleared, and the select should return to the default
+- [x] After the submission the form should be cleared, and the select should return to the default
 - [x] After submitting a toast notification from `react-hot-toast` should appear saying "Dog Created"

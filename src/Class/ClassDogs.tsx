@@ -27,7 +27,6 @@ export class ClassDogs extends Component<ClassDogProps> {
 
   render() {
     const { dogs, isLoading } = this.props;
-
     return (
       <>
         {dogs.map((dog) => {

@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, createRef } from "react";
 import { dogPictures } from "../dog-pictures";
 import { Dog } from "../types";
 
@@ -29,7 +29,11 @@ export class ClassCreateDogForm extends Component<
     this.setState({ nameInput: "" });
     this.setState({ descriptionInput: "" });
     this.setState({ imageInput: defaultSelectedImage });
+    if (this.dropDown.current)
+      this.dropDown.current.value = defaultSelectedImage;
   };
+
+  dropDown = createRef<HTMLSelectElement>();
 
   render() {
     const { postDog, isLoading } = this.props;
@@ -74,7 +78,7 @@ export class ClassCreateDogForm extends Component<
         <label htmlFor="picture">Select an Image</label>
         <select
           name="picture"
-          value={descriptionInput}
+          ref={this.dropDown}
           defaultValue={defaultSelectedImage}
           disabled={isLoading}
           onChange={(e) => {
