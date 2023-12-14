@@ -1,71 +1,36 @@
 import { Link } from "react-router-dom";
-import { FunctionalContentLayout } from "./FunctionalContentLayout";
-import { FunctionalDogs } from "./FunctionalDogs";
-import { FunctionalCreateDogForm } from "./FunctionalCreateDogForm";
-import { useState, useEffect } from "react";
-import { Dog, SelectorToggle } from "../types";
-import { Requests } from "../api";
-import toast from "react-hot-toast";
+import { ActiveComponent } from "../types";
+import { ReactNode } from "react";
 
-export const FunctionalSection = () => {
-  const [allDogs, setAllDogs] = useState<Dog[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSelectorActive, setIsSelectorActive] = useState<SelectorToggle>([
-    false,
-    false,
-    false,
-  ]);
-
-  const refetchDogData = () => {
-    return Requests.getAllDogs().then(setAllDogs);
+export const FunctionalSection = ({
+  children,
+  determineActiveComponent,
+  activeComponent,
+  favoritedDogsCount,
+  unfavoritedDogsCount,
+}: {
+  children: ReactNode;
+  determineActiveComponent: (component: ActiveComponent) => void;
+  activeComponent: ActiveComponent;
+  favoritedDogsCount: number;
+  unfavoritedDogsCount: number;
+}) => {
+  const generateClassName = (
+    activeComponent: ActiveComponent,
+    currentComponent: ActiveComponent
+  ) => {
+    return activeComponent === currentComponent ? "active" : "";
   };
 
-  useEffect(() => {
-    refetchDogData();
-  }, []);
-
-  const postDog = (dog: Omit<Dog, "id">) => {
-    setIsLoading(true);
-    Requests.postDog(dog)
-      .then(refetchDogData)
-      .then(() => {
-        toast.success(`Created ${dog.name}`);
-      })
-      .finally(() => setIsLoading(false));
-  };
-
-  const toggleActiveClassName = (index: number) =>
-    isSelectorActive[index] ? "active" : "";
-
-  const setActiveSelector = (index: number) => {
-    const newState = isSelectorActive.map((activeState, activeStateIndex) => {
-      const newActiveState = activeState === true ? false : true;
-      return activeStateIndex === index ? newActiveState : false;
-    }) as unknown as SelectorToggle;
-    setIsSelectorActive(newState);
-  };
-
-  const shouldShowFavoriteDogs = isSelectorActive[0];
-  const shouldShowUnfavoritedDogs = isSelectorActive[1];
-  const shouldShowForm = isSelectorActive[2];
-
-  const favoritedDogs = allDogs.filter(
-    (dog) => dog.isFavorite === true
-  ) as unknown as Dog[];
-  const unfavoritedDogs = allDogs.filter(
-    (dog) => dog.isFavorite === false
-  ) as unknown as Dog[];
-
-  const determineDogArray = () => {
-    if (shouldShowFavoriteDogs) {
-      return favoritedDogs;
-    } else if (shouldShowUnfavoritedDogs) {
-      return unfavoritedDogs;
-    } else {
-      return allDogs;
-    }
-  };
-  const dogArray = determineDogArray();
+  const favoritedClassName = generateClassName(activeComponent, "favorited");
+  const unfavoritedClassName = generateClassName(
+    activeComponent,
+    "unfavorited"
+  );
+  const createDogFormClassName = generateClassName(
+    activeComponent,
+    "create-dog-form"
+  );
 
   return (
     <section id="main-section">
@@ -76,37 +41,26 @@ export const FunctionalSection = () => {
         </Link>
         <div className="selectors">
           <div
-            className={`selector ${toggleActiveClassName(0)}`}
-            onClick={() => setActiveSelector(0)}
+            className={`selector ${favoritedClassName}`}
+            onClick={() => determineActiveComponent("favorited")}
           >
-            favorited ( {favoritedDogs.length} )
+            favorited ( {favoritedDogsCount} )
           </div>
           <div
-            className={`selector ${toggleActiveClassName(1)}`}
-            onClick={() => setActiveSelector(1)}
+            className={`selector ${unfavoritedClassName}`}
+            onClick={() => determineActiveComponent("unfavorited")}
           >
-            unfavorited ( {unfavoritedDogs.length} )
+            unfavorited ( {unfavoritedDogsCount} )
           </div>
           <div
-            className={`selector ${toggleActiveClassName(2)}`}
-            onClick={() => setActiveSelector(2)}
+            className={`selector ${createDogFormClassName}`}
+            onClick={() => determineActiveComponent("create-dog-form")}
           >
             create dog
           </div>
         </div>
       </div>
-      <FunctionalContentLayout>
-        {shouldShowForm ? (
-          <FunctionalCreateDogForm postDog={postDog} isLoading={isLoading} />
-        ) : (
-          <FunctionalDogs
-            dogs={dogArray}
-            refetchDogData={refetchDogData}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          />
-        )}
-      </FunctionalContentLayout>
+      <div className="content-container">{children}</div>;
     </section>
   );
 };

@@ -11,7 +11,7 @@
       "name": "Roselyn",
       "image": "/assets/chihuahua.avif",
       "description": "Coupe South withdrawal Soft Latin lime Reggae chapter",
-      "isFavorite": true,
+      "isFavorite": false,
       "id": 1
     },
     {
@@ -144,8 +144,15 @@
       "name": "asdfasdf",
       "description": "asdfasdf",
       "image": "/assets/blue-heeler.png",
-      "isFavorite": false,
+      "isFavorite": true,
       "id": 20
+    },
+    {
+      "name": "Macy",
+      "image": "/assets/cowardly.png",
+      "description": "good girl",
+      "isFavorite": true,
+      "id": 21
     }
   ]
 }

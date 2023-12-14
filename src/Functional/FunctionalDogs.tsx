@@ -1,31 +1,17 @@
 import { DogCard } from "../Shared/DogCard";
 import { Dog } from "../types";
-import { Requests } from "../api";
 
 export const FunctionalDogs = ({
   dogs,
-  refetchDogData,
+  deleteDog,
+  updateDog,
   isLoading,
-  setIsLoading,
 }: {
   dogs: Dog[];
-  refetchDogData: () => void;
+  deleteDog: (dog: Dog) => Promise<void>;
+  updateDog: (dog: Dog, isFavorite: boolean) => Promise<void>;
   isLoading: boolean;
-  setIsLoading: (isLoading: boolean) => void;
 }) => {
-  const deleteDog = (dog: Dog) => {
-    setIsLoading(true);
-    return Requests.deleteDog(dog)
-      .then(refetchDogData)
-      .finally(() => setIsLoading(false));
-  };
-  const updateDog = (dog: Dog, isFavorite: boolean) => {
-    setIsLoading(true);
-    return Requests.updateDog(dog, isFavorite)
-      .then(refetchDogData)
-      .finally(() => setIsLoading(false));
-  };
-
   return (
     <>
       {dogs.map((dog) => {
@@ -34,13 +20,13 @@ export const FunctionalDogs = ({
             dog={dog}
             key={dog.id}
             onTrashIconClick={() => {
-              deleteDog(dog);
+              deleteDog(dog).catch((error: Error) => error.message);
             }}
             onHeartClick={() => {
-              updateDog(dog, false);
+              updateDog(dog, false).catch((error: Error) => error.message);
             }}
             onEmptyHeartClick={() => {
-              updateDog(dog, true);
+              updateDog(dog, true).catch((error: Error) => error.message);
             }}
             isLoading={isLoading}
           />

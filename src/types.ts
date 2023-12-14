@@ -6,4 +6,4 @@ export type Dog = {
   id: number;
 }
 
-export type SelectorToggle = [boolean, boolean, boolean];
+export type ActiveComponent = "all" | "favorited" | "unfavorited" | "create-dog-form"
